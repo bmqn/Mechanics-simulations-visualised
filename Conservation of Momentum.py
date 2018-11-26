@@ -115,13 +115,13 @@ def run():
     return
 
 
-
+print("HELLO!")
 
 window = tkinter.Tk()
 window.protocol("WM_DELETE_WINDOW", cleanup)
 
-run = tkinter.Button(window, text ="Run", command = run)
-run.grid(row = 0, column=4)
+runButton = tkinter.Button(window, text ="Run", command = run)
+runButton.grid(row = 0, column=4)
 
 AMass = tkinter.Label(window, text="Object A mass:")
 AMass.grid(row = 0, column=0)
@@ -153,6 +153,8 @@ label2.grid(row = 3, column=3)
 timeMultiplier = tkinter.Scale(window, from_=0, to=10, resolution = 0.1, orient="horizontal", length=200)
 timeMultiplier.grid(row = 3, column=5)
 timeMultiplier.set(1)
+
+run()
 
 
 
