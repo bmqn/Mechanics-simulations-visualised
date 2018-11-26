@@ -4,45 +4,33 @@ w = 1000
 h = 300
 oW = 30
 oH = 60
-running = False
+running = True
 
+#Object 1
+u1 = 300
+x1 = 1 / 3 *  w
 
-def cleanup():
-    window.quit()
-    os._exit(0)
+#Object 2
+u2 = -150
+x2 = 2 / 3 * w
 
 def run():
-    global running, w, h, oW, oH
-    if (running):
-        running = False
-        print("RESETING!")
-        return
-    
-    print("RUN!")
-    
-    #Object 1
-    u1 = 300
-    x1 = 1 / 3 *  w
+    global running, w, h, oW, oH, u1, u2, x1, x2
 
-    #Object 2
-    u2 = -150
-    x2 = 2 / 3 * w
-    
+    print("RUN!")
     accumalator = 0
     last = time.time() 
     delta = 1/128
 
-    running = True
-    
     while running:
         
+        window.update()
+        window.update_idletasks()
+    
         multiplier = timeMultiplier.get()
         e = restitution.get()
         m1 = objectAMass.get()
         m2 = objectBMass.get()
-
-        window.update()
-        window.update_idletasks()
 
         while accumalator > delta:
             x1 += delta * u1 * multiplier
@@ -112,16 +100,32 @@ def run():
 
         accumalator += time.time()  - last
         last = time.time()
-    return
 
 
-print("HELLO!")
+def cleanup():
+    global running
+    running = False
+    window.quit()
+    os._exit(0)
+
+def reset():
+    global w, h, u1, u2, x1, x2
+    print("RESETING!")
+        
+    #Object 1
+    u1 = 300
+    x1 = 1 / 3 *  w
+
+    #Object 2
+    u2 = -150
+    x2 = 2 / 3 * w
+
 
 window = tkinter.Tk()
 window.protocol("WM_DELETE_WINDOW", cleanup)
 
-runButton = tkinter.Button(window, text ="Run", command = run)
-runButton.grid(row = 0, column=4)
+resetButton = tkinter.Button(window, text ="Reset", command = reset)
+resetButton.grid(row = 0, column=4)
 
 AMass = tkinter.Label(window, text="Object A mass:")
 AMass.grid(row = 0, column=0)
