@@ -8,11 +8,16 @@ running = True
 
 #Object 1
 u1 = 300
+m1 = 200
 x1 = 1 / 3 *  w
 
 #Object 2
-u2 = -150
+u2 = 0
+m2 = 300
 x2 = 2 / 3 * w
+
+Eb = 1/9
+Ew = 1/3
 
 def run():
     global running, w, h, oW, oH, u1, u2, x1, x2
@@ -28,9 +33,8 @@ def run():
         window.update_idletasks()
     
         multiplier = timeMultiplier.get()
-        e = restitution.get()
-        m1 = objectAMass.get()
-        m2 = objectBMass.get()
+        Eb = restitutionBall.get()
+        Ew = restitutionWall.get()
 
         while accumalator > delta:
             x1 += delta * u1 * multiplier
@@ -42,15 +46,15 @@ def run():
                 x1 -= overlap / 2
                 x2 += overlap / 2
 
-                v1 = ( (m1 * u1) + (m2 * u2) - (e * m2 * (u1 - u2)) ) / (m1 + m2)
-                v2 = ( (e * m1 * (u1 - u2)) + (m1 * u1) + (m2 * u2) )  / (m1 + m2)
+                v1 = ( (m1 * u1) + (m2 * u2) - (Eb * m2 * (u1 - u2)) ) / (m1 + m2)
+                v2 = ( (Eb * m1 * (u1 - u2)) + (m1 * u1) + (m2 * u2) )  / (m1 + m2)
 
                 print("--------------------------")
                 print("Collision!")
                 print("ObjectA initial velocity = ", format(u1, '.2f'), ", ObjectA final velocity = ", format(v1, '.2f'))
                 print("ObjectB initial velocity = ", format(u2, '.2f'), ", ObjectB final velocity = ", format(v2, '.2f'))
                 print("Total momentum = ", format((u1*m1) + (u2*m2), '.2f'))
-                print("Coefficient of restitution = ", e)
+                print("Coefficient of restitution = ", Eb)
                 print("--------------------------")
 
                 u1 = v1
@@ -65,12 +69,12 @@ def run():
                     overlap = x1 - oW
                     x1 -= overlap
 
-                v1 = ( (m1 * u1) - (e * 999999999999 * (u1 - 0)) ) / (m1 + 999999999999)
+                v1 = ( (m1 * u1) - (Ew * 999999999999 * (u1 - 0)) ) / (m1 + 999999999999)
                 print("--------------------------")
                 print("ObjectA collision with wall!")
                 print("ObjectA initial velocity = ", format(u1, '.2f'), ", ObjectA final velocity = ", format(v1, '.2f'))
                 print("Total momentum = ", format((u1*m1) + (u2*m2), '.2f'))
-                print("Coefficient of restitution = ", e)
+                print("Coefficient of restitution = ", Ew)
                 print("--------------------------")
                 u1 = v1
                 break
@@ -82,12 +86,12 @@ def run():
                 else:
                     overlap = x2 - oW
                     x2 -= overlap
-                v2 = ( (e * 999999999999 * (0 - u2)) + (m2 * u2) )  / (999999999999 + m2)
+                v2 = ( (Ew * 999999999999 * (0 - u2)) + (m2 * u2) )  / (999999999999 + m2)
                 print("--------------------------")
                 print("ObjectB collision with wall!")
                 print("ObjectB initial velocity = ", format(u2, '.2f'), ", ObjectB final velocity = ", format(v2, '.2f'))
                 print("Total momentum = ", format((u1*m1) + (u2*m2), '.2f'))
-                print("Coefficient of restitution = ", e)
+                print("Coefficient of restitution = ", Ew)
                 print("--------------------------")
                 u2 = v2
                 break
@@ -109,53 +113,93 @@ def cleanup():
     os._exit(0)
 
 def reset():
-    global w, h, u1, u2, x1, x2
+    global w, h, u1, u2, m1, m2, x1, x2
     print("RESETING!")
+
+    Eb = restitutionBall.get()
+    Ew = restitutionWall.get()
         
     #Object 1
-    u1 = 300
+    u1 = objectAvelocity.get()
+    m1 = objectAMass.get()
     x1 = 1 / 3 *  w
 
     #Object 2
-    u2 = -150
+    u2 = objectBvelocity.get()
+    m2 = objectBMass.get()
     x2 = 2 / 3 * w
 
 
 window = tkinter.Tk()
+window.configure(bg="#ffe6ff")
+window.title("Conservation of Momentum")
 window.protocol("WM_DELETE_WINDOW", cleanup)
 
-resetButton = tkinter.Button(window, text ="Reset", command = reset)
+#Reset button
+
+resetButton = tkinter.Button(window, text ="Reset", command = reset,bg="#ffe6ff")
 resetButton.grid(row = 0, column=4)
 
-AMass = tkinter.Label(window, text="Object A mass:")
-AMass.grid(row = 0, column=0)
+#Object A sliders
 
-objectAMass = tkinter.Scale(window, from_=10, to=1000, resolution = 10, orient="vertical", length=200)
-objectAMass.grid(row = 1, column=0)
+Avelocity = tkinter.Label(window, text="Object A initial velocity:", wraplength=50, fg="red",bg="#ffe6ff")
+Avelocity.grid(row = 0, column=0)
+
+objectAvelocity = tkinter.Scale(window, from_=-500, to=500, resolution = 10, orient="vertical", length=200, fg="red",bg="#ffe6ff")
+objectAvelocity.grid(row = 1, column=0)
+objectAvelocity.set(100)
+
+AMass = tkinter.Label(window, text="Object A mass:", wraplength=50, fg="red",bg="#ffe6ff")
+AMass.grid(row = 0, column=1)
+
+objectAMass = tkinter.Scale(window, from_=10, to=1000, resolution = 10, orient="vertical", length=200, fg="red",bg="#ffe6ff")
+objectAMass.grid(row = 1, column=1)
 objectAMass.set(100)
 
-BMass = tkinter.Label(window, text="Object B mass:")
+#Object B sliders
+
+Bvelocity = tkinter.Label(window, text="Object B initial velocity:", wraplength=50, fg="blue",bg="#ffe6ff")
+Bvelocity.grid(row = 0, column=10)
+
+objectBvelocity = tkinter.Scale(window, from_=-500, to=500, resolution = 10, orient="vertical", length=200, fg="blue",bg="#ffe6ff")
+objectBvelocity.grid(row = 1, column=10)
+objectBvelocity.set(100)
+
+BMass = tkinter.Label(window, text="Object B mass:", wraplength=50, fg="blue",bg="#ffe6ff")
 BMass.grid(row = 0, column=9)
 
-objectBMass = tkinter.Scale(window, from_=10, to=1000, resolution = 10, orient="vertical", length=200)
+objectBMass = tkinter.Scale(window, from_=10, to=1000, resolution = 10, orient="vertical", length=200, fg="blue",bg="#ffe6ff")
 objectBMass.grid(row = 1, column=9)
 objectBMass.set(100)
+
+#Canvas
 
 canvas = tkinter.Canvas(window, bg="black", height=h, width=w)
 canvas.grid(row = 1, column=2, columnspan = 5)
 
-label1 = tkinter.Label(window, text="Coefficient of restitution:")
+#Restitution sliders
+
+label1 = tkinter.Label(window, text="Balls coefficient of restitution:",bg="#ffe6ff")
 label1.grid(row = 2, column=3)
 
-restitution = tkinter.Scale(window, from_=0, to=1, resolution = 0.01, orient="horizontal", length=200)
-restitution.grid(row = 2, column=5)
-restitution.set(0.5)
+restitutionBall = tkinter.Scale(window, from_=0, to=1, resolution = 0.01, orient="horizontal", length=200,bg="#ffe6ff")
+restitutionBall.grid(row = 2, column=5)
+restitutionBall.set(0.5)
 
-label2 = tkinter.Label(window, text="Timer mutiplier:")
-label2.grid(row = 3, column=3)
+label3 = tkinter.Label(window, text="Walls coefficient of restitution:",bg="#ffe6ff")
+label3.grid(row = 3, column=3)
 
-timeMultiplier = tkinter.Scale(window, from_=0, to=10, resolution = 0.1, orient="horizontal", length=200)
-timeMultiplier.grid(row = 3, column=5)
+restitutionWall = tkinter.Scale(window, from_=0, to=1, resolution = 0.01, orient="horizontal", length=200,bg="#ffe6ff")
+restitutionWall.grid(row = 3, column=5)
+restitutionWall.set(0.5)
+
+label2 = tkinter.Label(window, text="Timer mutiplier:",bg="#ffe6ff")
+label2.grid(row = 4, column=3)
+
+#Time slider
+
+timeMultiplier = tkinter.Scale(window, from_=0, to=10, resolution = 0.1, orient="horizontal", length=200,bg="#ffe6ff")
+timeMultiplier.grid(row = 4, column=5)
 timeMultiplier.set(1)
 
 run()
