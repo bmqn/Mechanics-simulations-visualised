@@ -1,6 +1,6 @@
 import tkinter, time, math, os
 
-w = 1000
+w = 600
 h = 300
 oW = 30
 oH = 60
@@ -133,6 +133,7 @@ def reset():
 window = tkinter.Tk()
 window.configure(bg="#ffe6ff")
 window.title("Conservation of Momentum")
+window.attributes("-fullscreen", False)
 window.protocol("WM_DELETE_WINDOW", cleanup)
 
 #Reset button
@@ -145,31 +146,31 @@ resetButton.grid(row = 0, column=4)
 Avelocity = tkinter.Label(window, text="Object A initial velocity:", wraplength=50, fg="red",bg="#ffe6ff")
 Avelocity.grid(row = 0, column=0)
 
-objectAvelocity = tkinter.Scale(window, from_=-500, to=500, resolution = 10, orient="vertical", length=200, fg="red",bg="#ffe6ff")
-objectAvelocity.grid(row = 1, column=0)
+objectAvelocity = tkinter.Scale(window, from_=-500, to=500, resolution = 10, orient="vertical", length=300, fg="red",bg="#ffe6ff")
+objectAvelocity.grid(row = 1, column=0, padx=(10,10))
 objectAvelocity.set(100)
 
 AMass = tkinter.Label(window, text="Object A mass:", wraplength=50, fg="red",bg="#ffe6ff")
 AMass.grid(row = 0, column=1)
 
-objectAMass = tkinter.Scale(window, from_=10, to=1000, resolution = 10, orient="vertical", length=200, fg="red",bg="#ffe6ff")
-objectAMass.grid(row = 1, column=1)
+objectAMass = tkinter.Scale(window, from_=10, to=1000, resolution = 10, orient="vertical", length=300, fg="red",bg="#ffe6ff")
+objectAMass.grid(row = 1, column=1, padx=(10,10))
 objectAMass.set(100)
 
 #Object B sliders
 
 Bvelocity = tkinter.Label(window, text="Object B initial velocity:", wraplength=50, fg="blue",bg="#ffe6ff")
-Bvelocity.grid(row = 0, column=10)
+Bvelocity.grid(row = 0, column=8)
 
-objectBvelocity = tkinter.Scale(window, from_=-500, to=500, resolution = 10, orient="vertical", length=200, fg="blue",bg="#ffe6ff")
-objectBvelocity.grid(row = 1, column=10)
+objectBvelocity = tkinter.Scale(window, from_=-500, to=500, resolution = 10, orient="vertical", length=300, fg="blue",bg="#ffe6ff")
+objectBvelocity.grid(row = 1, column=8, padx=(10,10))
 objectBvelocity.set(100)
 
 BMass = tkinter.Label(window, text="Object B mass:", wraplength=50, fg="blue",bg="#ffe6ff")
-BMass.grid(row = 0, column=9)
+BMass.grid(row = 0, column=7)
 
-objectBMass = tkinter.Scale(window, from_=10, to=1000, resolution = 10, orient="vertical", length=200, fg="blue",bg="#ffe6ff")
-objectBMass.grid(row = 1, column=9)
+objectBMass = tkinter.Scale(window, from_=10, to=1000, resolution = 10, orient="vertical", length=300, fg="blue",bg="#ffe6ff")
+objectBMass.grid(row = 1, column=7, padx=(10,10))
 objectBMass.set(100)
 
 #Canvas
@@ -182,14 +183,14 @@ canvas.grid(row = 1, column=2, columnspan = 5)
 label1 = tkinter.Label(window, text="Balls coefficient of restitution:",bg="#ffe6ff")
 label1.grid(row = 2, column=3)
 
-restitutionBall = tkinter.Scale(window, from_=0, to=1, resolution = 0.01, orient="horizontal", length=200,bg="#ffe6ff")
+restitutionBall = tkinter.Scale(window, from_=0, to=1, resolution = 0.01, orient="horizontal", length=300,bg="#ffe6ff")
 restitutionBall.grid(row = 2, column=5)
 restitutionBall.set(0.5)
 
 label3 = tkinter.Label(window, text="Walls coefficient of restitution:",bg="#ffe6ff")
 label3.grid(row = 3, column=3)
 
-restitutionWall = tkinter.Scale(window, from_=0, to=1, resolution = 0.01, orient="horizontal", length=200,bg="#ffe6ff")
+restitutionWall = tkinter.Scale(window, from_=0, to=1, resolution = 0.01, orient="horizontal", length=300,bg="#ffe6ff")
 restitutionWall.grid(row = 3, column=5)
 restitutionWall.set(0.5)
 
@@ -198,9 +199,26 @@ label2.grid(row = 4, column=3)
 
 #Time slider
 
-timeMultiplier = tkinter.Scale(window, from_=0, to=10, resolution = 0.1, orient="horizontal", length=200,bg="#ffe6ff")
+timeMultiplier = tkinter.Scale(window, from_=0, to=10, resolution = 0.1, orient="horizontal", length=300,bg="#ffe6ff")
 timeMultiplier.grid(row = 4, column=5)
 timeMultiplier.set(1)
+
+window.grid_columnconfigure(0,weight=1)
+window.grid_columnconfigure(1,weight=1)
+window.grid_columnconfigure(2,weight=1)
+window.grid_columnconfigure(3,weight=1)
+window.grid_columnconfigure(4,weight=1)
+window.grid_columnconfigure(5,weight=1)
+window.grid_columnconfigure(6,weight=1)
+window.grid_columnconfigure(7,weight=1)
+window.grid_columnconfigure(8,weight=1)
+window.grid_columnconfigure(9, weight=1)
+window.grid_columnconfigure(10,weight=1)
+window.grid_rowconfigure(0,weight=1)
+window.grid_rowconfigure(1,weight=1)
+window.grid_rowconfigure(2,weight=1)
+window.grid_rowconfigure(3,weight=1)
+window.grid_rowconfigure(4,weight=1)
 
 run()
 
