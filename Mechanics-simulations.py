@@ -203,7 +203,7 @@ class Pendulum(tkinter.Frame):
         self.aa = 0
         self.av = 0
         self.theta = math.pi - 0.3
-        self.m = 100
+        self.m = 40
         self.r = 200
         self.g = 1000
         self.damping = 0.005
@@ -288,13 +288,18 @@ class Pendulum(tkinter.Frame):
         y_p = self.r * math.cos(self.theta)
 
         self.canvas.delete("all")
-        self.canvas.create_rectangle(x_p - 10 + w / 2, y_p - 10 + h / 2, x_p + 10 + w / 2, y_p+ 10 + h / 2, fill="red")
-        self.canvas.create_line(w / 2, h / 2, x_p + w / 2, y_p + h / 2, fill="red")
-
+        
         if (self.theta < math.pi):
-            self.canvas.create_arc(w / 2 - self.r / 2, h/2 - self.r / 2, w / 2 + self.r / 2, h / 2 + self.r / 2, start=-90, extent=self.theta*180/math.pi, width=2, outline='blue')
+            angle = self.theta*180/math.pi
+            self.canvas.create_arc(w / 2 - self.r / 2, h/2 - self.r / 2, w / 2 + self.r / 2, h / 2 + self.r / 2, start=-90, extent=angle, width=2, outline='blue')
+            self.canvas.create_text(w/2, h/2 - 10,fill="white",font="Helvetica 10 bold", text=int(angle))
         else:
-            self.canvas.create_arc(w / 2 - self.r / 2, h/2 - self.r / 2, w / 2 + self.r / 2, h / 2 + self.r / 2, start=270, extent=self.theta*180/math.pi - 360, width=2, outline='blue')
+            angle = self.theta*180/math.pi - 360
+            self.canvas.create_arc(w / 2 - self.r / 2, h/2 - self.r / 2, w / 2 + self.r / 2, h / 2 + self.r / 2, start=-90, extent=angle, width=2, outline='blue')
+            self.canvas.create_text(w/2, h/2 - 10,fill="white",font="Helvetica 10 bold", text=int(angle))
+
+        self.canvas.create_line(w / 2, h / 2, x_p + w / 2, y_p + h / 2, fill="red", width=5)
+        self.canvas.create_rectangle(x_p - self.m / 2 + w / 2, y_p - self.m / 2 + h / 2, x_p + self.m / 2 + w / 2, y_p+ self.m / 2 + h / 2, fill="red")
         
         self.canvas.after(int(self.delta * 1000), self.move_pendulum)
 
